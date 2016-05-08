@@ -29,16 +29,7 @@
         function login() {
 
 
-            var image = new Image();
-            image.src = "box1.jpg";
-            var context = document.getElementById('pic1').getContext('2d');
-            context.drawImage(image, 0, 0);
-            pic1ImageData = context.getImageData(0, 0, 400, 400);
-            image = new Image();
-            image.src = "box2.jpg";
-            context = document.getElementById('pic2').getContext('2d');
-            context.drawImage(image, 0, 0)
-            pic2ImageData = context.getImageData(0, 0, 400, 400);
+            
             drawCanvases();
 
         }
@@ -48,7 +39,7 @@
         }
 
         //(y+x)+x
-        var numbers = '0123456789xyabp';
+        var numbers = '0123456789xypst';
         var operators = '+-/*';
         function stringToFunction(fstring) {
 
@@ -149,81 +140,81 @@
             <table>
                 <tr>
                     <td>
-                        <canvas id="canvas1" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas1" onclick="setSelected(this)" width="150" height="150">
                             Canvas 1
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas2" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas2" onclick="setSelected(this)" width="150" height="150">
                             Canvas 2
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas3" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas3" onclick="setSelected(this)" width="150" height="150">
                             Canvas 3
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas4" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas4" onclick="setSelected(this)" width="150" height="150">
                             Canvas 4
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas5" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas5" onclick="setSelected(this)" width="150" height="150">
                             Canvas 5
                         </canvas>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <canvas id="canvas6" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas6" onclick="setSelected(this)" width="150" height="150">
                             Canvas 6
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas7" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas7" onclick="setSelected(this)" width="150" height="150">
                             Canvas 7
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas8" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas8" onclick="setSelected(this)" width="150" height="150">
                             Canvas 8
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas9" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas9" onclick="setSelected(this)" width="150" height="150">
                             Canvas 9
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas10" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas10" onclick="setSelected(this)" width="150" height="150">
                             Canvas 10
                         </canvas>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <canvas id="canvas11" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas11" onclick="setSelected(this)" width="150" height="150">
                             Canvas 11
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas12" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas12" onclick="setSelected(this)" width="150" height="150">
                             Canvas 12
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas13" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas13" onclick="setSelected(this)" width="150" height="150">
                             Canvas 13
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas14" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas14" onclick="setSelected(this)" width="150" height="150">
                             Canvas 14
                         </canvas>
                     </td>
                     <td>
-                        <canvas id="canvas15" onclick="setSelected(this)" width="100" height="100">
+                        <canvas id="canvas15" onclick="setSelected(this)" width="150" height="150">
                             Canvas 15
                         </canvas>
                     </td>
@@ -471,26 +462,16 @@
         }
         F.prototype.eval = function (x, y, scale) {
             if (this.leaf) {
+                var a = 256 / scale;
                 if (this.value == 'x') return x * (256 / scale);
                 if (this.value == 'y') return y * (256 / scale);
-                if (this.value == 'a') {
-                    index = ((x * (400 / scale)) + (y * (400 / scale)) * pic1ImageData.width) * 4;
-
-                    r = pic1ImageData.data[index + 0];
-                    g = pic1ImageData.data[index + 1];
-                    b = pic1ImageData.data[index + 2];
-                    return (r + g + b) / 3;
+                if (this.value == 's') {                    
+                    return (Math.sin(x * a * (Math.PI / 180)) + 1) * 256;
                 }
-                if (this.value == 'b') {
-                    index = ((x * (400 / scale)) + (y * (400 / scale)) * pic2ImageData.width) * 4;
-
-                    r = pic2ImageData.data[index + 0];
-                    g = pic2ImageData.data[index + 1];
-                    b = pic2ImageData.data[index + 2];
-                    return (r + g + b) / 3;
+                if (this.value == 't') {
+                    return (Math.tan(y * a * (Math.PI / 180)) + 1) * 256;
                 }
-
-                if (this.value == 'p') {
+                if (this.value == 'p') {                   
                     return noise.noise(x, y, scale);
                 }
 
@@ -505,9 +486,12 @@
         }
         F.prototype.tostring = function () {
             if (this.leaf) {
+                //this is all redundant for now but leaves us ready for change
                 if (this.value == 'x') return 'x';
                 if (this.value == 'y') return 'y';
                 if (this.value == 'p') return 'p';
+                if (this.value == 's') return 's';
+                if (this.value == 't') return 't';
                 return this.value;
             }
             else {
@@ -537,6 +521,8 @@
             str = replaceAll(str, "/", "F");
             str = replaceAll(str, "*", "G");
             str = replaceAll(str, "p", "H");
+            str = replaceAll(str, "s", "I");
+            str = replaceAll(str, "t", "J");
             return str;
         }
 
@@ -549,6 +535,8 @@
             str = replaceAll(str, "F", "/");
             str = replaceAll(str, "G", "*");
             str = replaceAll(str, "H", "p");
+            str = replaceAll(str, "I", "s");
+            str = replaceAll(str, "J", "t");
             return str;
         }
 
@@ -568,8 +556,8 @@
             var leaf;
             if (leafNum == 0) leaf = 'x';
             if (leafNum == 1) leaf = 'y';
-            if (leafNum == 2) leaf = 'a';
-            if (leafNum == 3) leaf = 'b';
+            if (leafNum == 2) leaf = 's';
+            if (leafNum == 3) leaf = 't';
             if (leafNum == 4) leaf = 'p';
             if (leafNum > 4) leaf = Math.floor(Math.random() * 256);
             return leaf;
@@ -758,9 +746,9 @@
                 bFunction = canvasFunctionsB[i];
 
                 // draw random dots
-                for (x = 0; x < 100; x++) {
-                    for (y = 0; y < 100; y++) {
-                        setPixel(imageData, x, y, rFunction.eval(x, y, 100), gFunction.eval(x, y, 100), bFunction.eval(x, y, 100), 0xff); // 0xff opaque
+                for (x = 0; x < 150; x++) {
+                    for (y = 0; y < 150; y++) {
+                        setPixel(imageData, x, y, rFunction.eval(x, y, 150), gFunction.eval(x, y, 150), bFunction.eval(x, y, 150), 0xff); // 0xff opaque
                     }
                 }
                 // copy the image data back onto the canvas
